@@ -7,6 +7,11 @@ class WeekType(Enum):
     ODD = 1
     EVEN = 2
 
+class ClassType(Enum):
+    FORENOON = 0
+    AFTERNOON = 1
+    NIGHT = 2
+
 class ClassTime:
 
     def __init__(self, start, end):
@@ -15,14 +20,19 @@ class ClassTime:
 
     def _GetStartTime(self, start):
         if start == 1:
+            self.type = ClassType.FORENOON
             return datetime.time(8, 0)
         if start == 3:
+            self.type = ClassType.FORENOON
             return datetime.time(10, 0)
         if start == 5:
+            self.type = ClassType.AFTERNOON
             return datetime.time(13, 30)
         if start == 7:
+            self.type = ClassType.AFTERNOON
             return datetime.time(15, 30)
         if start == 9:
+            self.type = ClassType.NIGHT
             return datetime.time(18, 0)
 
     def _GetEndTime(self, end):
@@ -35,5 +45,5 @@ class ClassTime:
         if end == 8:
             return datetime.time(17, 10)
         if end == 10:
-            return datetime.time(19, 30)
+            return datetime.time(19, 40)
 

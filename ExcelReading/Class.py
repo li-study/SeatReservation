@@ -68,14 +68,25 @@ class Class:
             return 4
 
     def isHavingClass(self, time):
+        predictTime = time + datetime.timedelta(hours=2)
         for i in range(len(self.courseList)):
-
             if self.courseList[i].isHavingClass(time) != -1:
                 takeUp = self.courseList[i].isHavingClass(time)
-                if self.courseList[i + 1].isHavingClass(time + datetime.timedelta(hours=2)) != -1:
+                # 处理连着两节课的问题
+                if self.courseList[i].classTime.type == self.courseList[i + 1].classTime.type and self.courseList[
+                    i + 1].isHavingClass(predictTime) != -1:
                     takeUp += 120
                 return takeUp
-
+        # 处理课间的问题
+        predictTime = time + datetime.timedelta(minutes=20)
+        if (datetime.datetime.combine(time.date(), datetime.time(18, 0)) - time).seconds <= 1200 or (
+                datetime.datetime.combine(time.date(), datetime.time(13, 30)) - time).seconds <= 1200:
+            return -1;
+        for course in self.courseList:
+            if course.isHavingClass(predictTime) != -1:
+                takeUp = course.isHavingClass(predictTime) + 20
+                return int(takeUp)
+        # 需要处理午休和晚修最后20分钟的问题
         return -1
 
 
